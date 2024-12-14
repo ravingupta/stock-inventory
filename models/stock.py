@@ -55,15 +55,12 @@ class Stock:
     def save(self):
         obj = Stock.filter({'ticker': self.ticker})
         if not obj.empty:
-            obj[0]['name'] = self.name
-            obj[0]['tags'] = self.tags
-            obj[0]['url'] = self.url
-            obj[0]['exchange'] = self.exchange
-            obj[0]['symbol'] = self.symbol
-            obj[0]['ticker'] = self.ticker
+            stock_db.loc[stock_db['ticker'] == self.ticker, "name"] = self.name
+            stock_db.loc[stock_db['ticker'] == self.ticker, "url"] = self.url
+            stock_db.loc[stock_db['ticker'] == self.ticker, "exchange"] = self.exchange
+            stock_db.loc[stock_db['ticker'] == self.ticker, "symbol"] = self.symbol
         else:
             stock_db.loc[len(stock_db)] = [self.name, self.tags, self.url, self.exchange, self.symbol, self.ticker]
-        print(stock_db)
         return self
 
     @staticmethod

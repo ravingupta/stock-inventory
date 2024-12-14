@@ -18,7 +18,7 @@ def all_stocks():
         if ticker:
             data = fetch_ticker_details(ticker)
             if data:
-                obj = Stock(data).save()
+                Stock(data).save()
                 return jsonify({ "message": "Success"})
         return jsonify({"message": "Request Failed"})
 
