@@ -12,8 +12,8 @@ class StockDetails:
 
     def save(self):
         obj = StockDetails.filter({'ticker': self.ticker, 'label': self.label})
-        if obj:
-            obj['value'] = self.value
+        if not obj.empty:
+            obj[0]['value'] = self.value
         else:
             stock_details_db.loc[len(stock_details_db)] = [self.ticker, self.label, self.value]
         return self
@@ -54,15 +54,16 @@ class Stock:
 
     def save(self):
         obj = Stock.filter({'ticker': self.ticker})
-        if obj:
-            obj['name'] = self['name']
-            obj['tags'] = self['tags']
-            obj['url'] = self['url']
-            obj['exchange'] = self['exchange']
-            obj['symbol'] = self['symbol']
-            obj['ticker'] = self['ticker']
+        if not obj.empty:
+            obj[0]['name'] = self.name
+            obj[0]['tags'] = self.tags
+            obj[0]['url'] = self.url
+            obj[0]['exchange'] = self.exchange
+            obj[0]['symbol'] = self.symbol
+            obj[0]['ticker'] = self.ticker
         else:
             stock_db.loc[len(stock_db)] = [self.name, self.tags, self.url, self.exchange, self.symbol, self.ticker]
+        print(stock_db)
         return self
 
     @staticmethod

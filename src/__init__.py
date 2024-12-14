@@ -1,1 +1,1 @@
-import stocks
+from .stocks import stocks_view

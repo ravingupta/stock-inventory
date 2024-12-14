@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>List of all stocks</title>
+    </head>
+    <body>
+        <h1>Stocks Listing</h1>
+        <div>
+            <span>Add Stock</span>
+            <input id="ticker_input" placeholder="Add a new ticker" value="GOOGL:NASDAQ" />
+            <button onclick="add_ticker()">Submit</button>
+        </div>
+        <ul>
+            {% for stock in stocks %}
+            <li>{{stock}}</li>
+            {% endfor %}
+        </ul>
+        <script>
+            async function add_ticker() {
+                ticker = document.getElementById('ticker_input').value;
+                const response = await fetch("/stocks", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        ticker
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                } else {
+                    const json_res = await response.json();
+                    console.log(json_res);
+                    alert(json_res['message']);
+                }
+            }
+        </script>
+    </body>
+</html>

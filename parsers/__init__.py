@@ -1,0 +1,1 @@
+from .google_finance import fetch_ticker_details
