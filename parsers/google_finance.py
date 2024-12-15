@@ -10,7 +10,7 @@ def fetch_ticker_details(ticker):
         soup = BeautifulSoup(page.text, 'html.parser')
 
         name = soup.find('div', {"role" : "heading", "class": "zzDege"}).text.strip()
-        about = soup.find('div', class_ = "bLLb2d").text.strip().replace("\n", " ").replace("Wikipedia", "")
+        about = soup.find('div', class_ = "bLLb2d").text.strip().replace("\n", " ").replace("Wikipedia", "") if soup.find('div', class_ = "bLLb2d") else ""
         price = soup.find('div', class_ = "AHmHk").text.strip().replace("$", "").replace(",", "")
         tags = [t.text for t in soup.find_all('span', class_ = "w2tnNd")]
         labels = [t.text for t in soup.find_all('div', class_ = "mfs7Fc")]
