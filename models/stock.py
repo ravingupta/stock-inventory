@@ -62,15 +62,18 @@ class Stock:
         # Create entry for all related drugs
         for t in data.get('related', []):
             Stock(t).save()
+        for t in data.get('others', []):
+            Stock(t).save()
 
     def save(self):
         obj = Stock.filter({'ticker': self.ticker})
         if not obj.empty:
-            stock_db.loc[stock_db['ticker'] == self.ticker, "name"] = self.name
-            stock_db.loc[stock_db['ticker'] == self.ticker, "url"] = self.url
-            stock_db.loc[stock_db['ticker'] == self.ticker, "exchange"] = self.exchange
-            stock_db.loc[stock_db['ticker'] == self.ticker, "symbol"] = self.symbol
+            if self.about is not None:
+                stock_db.loc[stock_db['ticker'] == self.ticker, "about"] = self.about # Should be part of update method
+            # if len(self.tags) > 0:
+            #     stock_db.loc[stock_db['ticker'] == self.ticker, "tags"] = self.tags
             stock_db.loc[stock_db['ticker'] == self.ticker, "price"] = self.price
+            stock_db.loc[stock_db['ticker'] == self.ticker, "last_modified"] = self.last_modified
         else:
             stock_db.loc[len(stock_db)] = [self.name, self.tags, self.url, self.exchange, self.symbol, self.ticker, self.price, self.about, self.last_modified]
         dump_stocks()

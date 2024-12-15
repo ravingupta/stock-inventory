@@ -16,10 +16,14 @@ def all_stocks():
     elif request.method == 'POST':
         ticker = request.get_json().get("ticker", None)
         if ticker:
-            data = fetch_ticker_details(ticker)
-            if data:
-                Stock(data).save()
-                return jsonify({ "message": "Success"})
+            obj = Stock.filter({'ticker': ticker})
+            if obj.empty:
+                data = fetch_ticker_details(ticker)
+                if data:
+                    Stock(data).save()
+                    return jsonify({ "message": "Success"})
+            else:
+                return jsonify({"message": "Stock already exist"})
         return jsonify({"message": "Request Failed"})
 
 

@@ -31,6 +31,15 @@ def fetch_ticker_details(ticker):
             "currency": t['data-currency-code']
         } for t in soup.find_all('div', {"jsname" : "UEIKff"})]
 
+        others = [{ 
+            "ticker": t['href'].replace("./quote/", ""),
+            "name": t.find('div', class_ = "RwFyvf").text.strip(),
+            "price": t.find('div', class_ = "YMlKec").text.replace("$", "").replace(",", ""),
+            "symbol": t.find('div', class_ = "COaKTb").text.strip(),
+            "exchange": t['href'].replace("./quote/", "").split(":")[1],
+            "url": f"https://www.google.com/finance/quote/{t['href'].replace('./quote/', '')}?hl=en",
+        } for t in soup.find_all('a', class_ = "tOzDHb")]
+
         data = {
             'name': name,
             'about': about,
@@ -41,7 +50,8 @@ def fetch_ticker_details(ticker):
             'exchange': ticker_details[0],
             'symbol': ticker_details[1],
             'ticker': ticker,
-            'related': related
+            'related': related,
+            'others': others
         }
         return data
     except Exception as e:
