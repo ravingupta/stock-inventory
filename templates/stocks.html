@@ -12,7 +12,7 @@
         </div>
         <ul>
             {% for stock in stocks %}
-            <li>{{stock}}</li>
+            <li>{{stock['name']}} ({{stock['ticker']}})</li>
             {% endfor %}
         </ul>
         <script>

@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, abort, request, Response, jsonify
 from jinja2 import TemplateNotFound
 from parsers import fetch_ticker_details
 from models import Stock
+import json
 
 stocks_view = Blueprint('stocks_view', __name__, template_folder='templates')
 
@@ -9,7 +10,8 @@ stocks_view = Blueprint('stocks_view', __name__, template_folder='templates')
 def all_stocks():
     if request.method == 'GET':
         try:
-            stocks = Stock.unique('name')
+            result = Stock.objects().to_json(orient="records")
+            stocks = json.loads(result)
             return render_template('stocks.html', stocks=stocks)
         except TemplateNotFound:
             abort(404)

@@ -35,6 +35,10 @@ class StockDetails:
         if col in STOCK_DETAILS_COLUMNS:
             return stock_details_db[col].unique()
         raise Exception(f"Column '{col}' doesn't exist")
+    
+    @staticmethod
+    def objects():
+        return stock_details_db
 
 class Stock:
     name = None
@@ -98,3 +102,7 @@ class Stock:
         if col in STOCK_COLUMNS:
             return stock_db[col].unique()
         raise Exception(f"Column '{col}' doesn't exist")
+
+    @staticmethod
+    def objects():
+        return stock_db
