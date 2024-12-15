@@ -8,6 +8,8 @@ Welcome to the **Stock-Inventory**, an open-source Python Flask application desi
 ## Purpose
 The primary goal of this project is **educational**. It serves as a hands-on learning experience, offering in-depth insights into various technologies while providing a practical example to understand requirements and their implementation effectively.
 
+![Project Screenshot](https://github.com/ravingupta/stock-inventory/docs/project-demo(1).png?raw=true)
+
 ---
 
 ## Technology Stack
