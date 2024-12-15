@@ -1,4 +1,5 @@
 from .db import stock_db, stock_details_db, STOCK_DETAILS_COLUMNS, STOCK_COLUMNS
+from scripts.db_dump import dump_stocks, dump_stock_details
 
 class StockDetails:
     ticker = None
@@ -61,6 +62,10 @@ class Stock:
             stock_db.loc[stock_db['ticker'] == self.ticker, "symbol"] = self.symbol
         else:
             stock_db.loc[len(stock_db)] = [self.name, self.tags, self.url, self.exchange, self.symbol, self.ticker]
+        for t in self.values:
+            t.save()
+        dump_stocks()
+        dump_stock_details()
         return self
 
     @staticmethod
