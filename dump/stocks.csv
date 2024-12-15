@@ -1,3 +1,13 @@
-name,tags,url,exchange,symbol,ticker
-Alphabet Inc Class A,"['Stock', 'Climate leader', 'US listed security', 'US headquartered']",https://www.google.com/finance/quote/GOOGL:NASDAQ?hl=en,GOOGL,NASDAQ,GOOGL:NASDAQ
-Global X Uranium ETF,"['ETF', 'US listed security']",https://www.google.com/finance/quote/URA:NYSEARCA?hl=en,URA,NYSEARCA,URA:NYSEARCA
+name,tags,url,exchange,symbol,ticker,price,about,last_modified
+Alphabet Inc Class C,[],https://www.google.com/finance/quote/GOOG:NASDAQ?hl=en,NASDAQ,GOOG,GOOG:NASDAQ,191.38,,2024-12-14 20:42:30.054150
+Amazon.com Inc,[],https://www.google.com/finance/quote/AMZN:NASDAQ?hl=en,NASDAQ,AMZN,AMZN:NASDAQ,227.46,,2024-12-14 20:42:30.055115
+NVIDIA Corp,[],https://www.google.com/finance/quote/NVDA:NASDAQ?hl=en,NASDAQ,NVDA,NVDA:NASDAQ,134.25,,2024-12-14 20:42:30.058557
+Apple Inc,[],https://www.google.com/finance/quote/AAPL:NASDAQ?hl=en,NASDAQ,AAPL,AAPL:NASDAQ,248.13,,2024-12-14 20:42:30.059271
+Microsoft Corp,[],https://www.google.com/finance/quote/MSFT:NASDAQ?hl=en,NASDAQ,MSFT,MSFT:NASDAQ,447.27,,2024-12-14 20:42:30.060168
+Boeing Co,[],https://www.google.com/finance/quote/BA:NYSE?hl=en,NYSE,BA,BA:NYSE,169.65,,2024-12-14 20:42:30.060959
+Tesla Inc,[],https://www.google.com/finance/quote/TSLA:NASDAQ?hl=en,NASDAQ,TSLA,TSLA:NASDAQ,436.23,,2024-12-14 20:42:30.061601
+Snowflake Inc,[],https://www.google.com/finance/quote/SNOW:NYSE?hl=en,NYSE,SNOW,SNOW:NYSE,167.67,,2024-12-14 20:42:30.062205
+Meta Platforms Inc,[],https://www.google.com/finance/quote/META:NASDAQ?hl=en,NASDAQ,META,META:NASDAQ,620.35,,2024-12-14 20:42:30.062914
+Crowdstrike Holdings Inc,[],https://www.google.com/finance/quote/CRWD:NASDAQ?hl=en,NASDAQ,CRWD,CRWD:NASDAQ,368.02,,2024-12-14 20:42:30.063553
+Alphabet Inc Class A,"['Stock', 'Climate leader', 'US listed security', 'US headquartered']",https://www.google.com/finance/quote/GOOGL:NASDAQ?hl=en,GOOGL,NASDAQ,GOOGL:NASDAQ,189.82,"Alphabet Inc. is an American multinational technology conglomerate holding company headquartered in Mountain View, California. Alphabet is the world's second-largest technology company by revenue, after Apple, and one of the world's most valuable companies. It was created through a restructuring of Google on October 2, 2015, and became the parent holding company of Google and several former Google subsidiaries. It is considered one of the Big Five American information technology companies, alongside Amazon, Apple, Meta, and Microsoft.
+The establishment of Alphabet Inc. was prompted by a desire to make the core Google business ""cleaner and more accountable"" while allowing greater autonomy to group companies that operate in businesses other than Internet services. Founders Larry Page and Sergey Brin announced their resignation from their executive posts in December 2019, with the CEO role to be filled by Sundar Pichai, who is also the CEO of Google. Page and Brin remain employees, board members, and controlling shareholders of Alphabet Inc. ",2024-12-14 20:42:30.054138
