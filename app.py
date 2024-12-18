@@ -6,4 +6,7 @@ app.register_blueprint(stocks_view)
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return "<p>Welcome to the Stock Inventory Project!</p>"
+
+if __name__ == "__main__":
+    app.run(debug=True)
