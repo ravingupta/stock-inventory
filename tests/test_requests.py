@@ -1,64 +1,94 @@
 import pytest
-from unittest.mock import patch, MagicMock
 from flask import Flask
-from app import stocks_view  # Import the blueprint from your app
+from unittest.mock import patch
+import pandas as pd
 
+from parsers.google_finance import fetch_ticker_details
+from src import stocks_view
+from models import Stock
+
+
+# Test data
+TEST_STOCKS_DATA = [
+    {
+        "name": "Alphabet Inc Class A",
+        "ticker": "GOOGL:NASDAQ",
+        "url": "https://www.google.com/finance/quote/GOOGL:NASDAQ?hl=en"
+    }
+]
+
+TEST_STOCK_DETAILS = [
+    {"ticker": "GOOGL:NASDAQ", "label": "Market Cap", "value": "1.8T"}
+]
+
+# Create a test Flask app
 @pytest.fixture
 def client():
-    """Fixture for creating a Flask test client."""
     app = Flask(__name__)
     app.register_blueprint(stocks_view)
     app.config['TESTING'] = True
-    client = app.test_client()
-    yield client
+    with app.test_client() as client:
+        yield client
 
+# Mock CSV data setup
+@pytest.fixture
+def setup_test_data():
+    global stock_db, stock_details_db
+    stock_db = pd.DataFrame(TEST_STOCKS_DATA)
+    stock_details_db = pd.DataFrame(TEST_STOCK_DETAILS)
+    yield
+    # Cleanup after tests
+    stock_db = pd.DataFrame()
+    stock_details_db = pd.DataFrame()
 
-@patch('app.stocks_view')
-def test_all_stocks_get(mock_stocks_view, client):
-    """Test GET request for /stocks route."""
-    mock_stocks_view.return_value.to_json.return_value = '[{"ticker": "AAPL", "price": 150}]'
+# Test /stocks endpoint
+def test_all_stocks_get(client, setup_test_data):
     response = client.get('/stocks')
     assert response.status_code == 200
-    assert b"AAPL" in response.data
+    assert b"Google" in response.data  # Verify stock name in rendered HTML
 
+def test_all_stocks_post(client, setup_test_data):
+    with patch('parsers.fetch_ticker_details', return_value=TEST_STOCKS_DATA[0]):
+        response = client.post('/stocks', json={"ticker": "GOOGL:NASDAQ"})
+        assert response.status_code == 200
+        assert b"Success" in response.data
 
-# @patch('models.Stock.filter')
-# @patch('parsers.fetch_ticker_details')
-# @patch('models.Stock.save')
-# def test_all_stocks_post(mock_save, mock_fetch_ticker_details, mock_filter, client):
-#     """Test POST request for /stocks route."""
-#     # Simulate an empty filter result and a valid fetch result
-#     mock_filter.return_value.empty = True
-#     mock_fetch_ticker_details.return_value = {"ticker": "AAPL", "price": 150}
+def test_all_stocks_post_duplicate(client, setup_test_data):
+    response = client.post('/stocks', json={"ticker": "GOOGL:NASDAQ"})
+    assert response.status_code == 200
+    assert b"Stock already exist" in response.data
 
-#     response = client.post('/stocks', json={"ticker": "AAPL"})
-#     assert response.status_code == 200
-#     assert b"Success" in response.data
+# Test /stock/<stock> endpoint
+def test_stock_details(client, setup_test_data):
+    response = client.get('/stock/GOOGL:NASDAQ')
+    assert response.status_code == 200
 
-#     # Test when stock already exists
-#     mock_filter.return_value.empty = False
-#     response = client.post('/stocks', json={"ticker": "AAPL"})
-#     assert b"Stock already exist" in response.data
+# Test model methods
+def test_stock_save():
+    stock = Stock(TEST_STOCKS_DATA[0])
+    stock.save()
+    assert len(stock_db) == 1
+    assert stock_db.iloc[0]['name'] == "Google"
 
-#     # Test failure case
-#     response = client.post('/stocks', json={})
-#     assert b"Request Failed" in response.data
+def test_stock_filter():
+    stock = Stock(TEST_STOCKS_DATA[0])
+    stock.save()
+    filtered = Stock.filter({"ticker": "GOOGL:NASDAQ"})
+    assert not filtered.empty
+    assert filtered.iloc[0]['name'] == "Google"
 
+def test_stock_unique():
+    stock = Stock(TEST_STOCKS_DATA[0])
+    stock.save()
+    unique_tickers = Stock.unique("ticker")
+    assert len(unique_tickers) == 1
+    assert unique_tickers[0] == "GOOGL:NASDAQ"
 
-# @patch('models.stock_details_db.dump_to_csv')
-# def test_dump_stock_details(mock_dump_to_csv):
-#     """Test dump_stock_details functionality."""
-#     from scripts import dump_stock_details
-#     from models.db import stock_details_db
-#     dump_stock_details()
-#     mock_dump_to_csv.assert_called_once_with(stock_details_db, "dump/stocks_details.csv")
-
-
-# @patch('app.requests.get')
-# def test_fetch_ticker_details(mock_beautifulsoup, mock_requests_get):
-#     """Test fetch_ticker_details function."""
-#     from parsers import fetch_ticker_details
-#     ticker = "AAPL:NASDAQ"
-#     result = fetch_ticker_details(ticker)
-#     assert result is not None
-#     assert result['ticker'] == ticker
+# Test fetch_ticker_details
+def test_fetch_ticker_details():
+    with patch('requests.get') as mock_get:
+        mock_get.return_value = """
+        <div role="heading" class="zzDege">Alphabet Inc Class A</div>
+        """
+        data = fetch_ticker_details("GOOGL:NASDAQ")
+        assert data['name'] == "Alphabet Inc Class A"

@@ -62,6 +62,12 @@ class Stock:
         self.last_modified = datetime.now()
         self.values = [StockDetails(self.ticker, t) for t in data.get('values', [])]
 
+        # Create entry for all related drugs
+        for t in data.get('related', []):
+            Stock(t).save()
+        for t in data.get('others', []):
+            Stock(t).save()
+
     def save(self):
         global stock_db
         with lock:
